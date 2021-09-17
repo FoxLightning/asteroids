@@ -1,4 +1,4 @@
-#include "Asteroid.hpp"
+#include <Asteroid.hpp>
 #define SCREEN_X  1280
 #define SCREEN_Y  720
 
@@ -39,6 +39,12 @@ void Asteroid::calculate() {
     }
     if (position.y > SCREEN_Y) {
         position.y = (int)position.y % SCREEN_Y;
+    }
+    if (position.x < 0) {
+        position.x = position.x+SCREEN_X;
+    }
+    if (position.y < 0) {
+        position.y = position.y+SCREEN_Y;
     }
 }
 
