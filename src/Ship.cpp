@@ -91,6 +91,6 @@ void Ship::engine_off() {
     acceleration.y = 0;
 }
 
-// void fire() {
-//     std::cout << "Пиу" << std::endl;
-// }
+void Ship::fire() {
+    std::cout << "Пиу" << std::endl;
+}

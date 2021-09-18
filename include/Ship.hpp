@@ -15,7 +15,7 @@ public:
     void turn_right();
     void engine_on();
     void engine_off();
-    // void fire();
+    void fire();
 
     void calculate();
     sf::Vector2f GetPosition();
