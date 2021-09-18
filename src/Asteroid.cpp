@@ -1,10 +1,9 @@
 #include <Asteroid.hpp>
-#define SCREEN_X  1280
-#define SCREEN_Y  720
 
 Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
-                   sf::RenderWindow *win) {
+                   sf::RenderWindow *win, sf::Vector2i resolution) {
     // phisics
+    borders             = resolution;
     alive               = true;
     position            = pos;
     speed               = sp;
@@ -34,17 +33,17 @@ void Asteroid::calculate() {
     position.x  += speed.x;
     position.y  += speed.y;
     rotation    += rotation_speed;
-    if (position.x > SCREEN_X) {
-        position.x = (int)position.x % SCREEN_X;
+    if (position.x > borders.x) {
+        position.x = (int)position.x % borders.x;
     }
-    if (position.y > SCREEN_Y) {
-        position.y = (int)position.y % SCREEN_Y;
+    if (position.y > borders.y) {
+        position.y = (int)position.y % borders.y;
     }
     if (position.x < 0) {
-        position.x = position.x+SCREEN_X;
+        position.x = position.x+borders.x;
     }
     if (position.y < 0) {
-        position.y = position.y+SCREEN_Y;
+        position.y = position.y+borders.y;
     }
 }
 

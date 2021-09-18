@@ -4,6 +4,7 @@
 class AbstractPhysicalObject {
 public:
     // phisics
+    sf::Vector2i        borders;
     bool                alive;
     sf::Vector2f        position;
     sf::Vector2f        speed;

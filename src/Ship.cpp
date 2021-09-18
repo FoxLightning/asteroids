@@ -1,13 +1,13 @@
-#include "Ship.hpp"
+#include <Ship.hpp>
 #include <math.h>
 #include <iostream>
+
 #define PI 3.14159265
-#define SCREEN_X  1280
-#define SCREEN_Y  720
 
 Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
-           sf::RenderWindow *win) {
+           sf::RenderWindow *win, sf::Vector2i resolution) {
     // phisics
+    borders             = resolution;
     alive               = true;
     position            = pos;
     speed               = sp;
@@ -36,17 +36,17 @@ void Ship::calculate() {
     speed.y     += acceleration.y;
     position.x  += speed.x;
     position.y  += speed.y;
-    if (position.x > SCREEN_X) {
-        position.x = (int)position.x % SCREEN_X;
+    if (position.x > borders.x) {
+        position.x = (int)position.x % borders.x;
     }
-    if (position.y > SCREEN_Y) {
-        position.y = (int)position.y % SCREEN_Y;
+    if (position.y > borders.y) {
+        position.y = (int)position.y % borders.y;
     }
     if (position.x < 0) {
-        position.x = position.x+SCREEN_X;
+        position.x = position.x+borders.x;
     }
     if (position.y < 0) {
-        position.y = position.y+SCREEN_Y;
+        position.y = position.y+borders.y;
     }
 }
 
@@ -91,6 +91,6 @@ void Ship::engine_off() {
     acceleration.y = 0;
 }
 
-void fire() {
-    std::cout << "Пиу" << std::endl;
-}
+// void fire() {
+//     std::cout << "Пиу" << std::endl;
+// }

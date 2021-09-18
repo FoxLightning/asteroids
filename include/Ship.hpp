@@ -8,13 +8,14 @@ private:
     sf::Vector2f        acceleration;
 public:
     Ship(sf::Vector2f pos, sf::Vector2f sp,
-         sf::RenderWindow *win);
+         sf::RenderWindow *win, sf::Vector2i resolution);
     ~Ship();
+
     void turn_left();
     void turn_right();
     void engine_on();
     void engine_off();
-    void fire();
+    // void fire();
 
     void calculate();
     sf::Vector2f GetPosition();
