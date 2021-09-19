@@ -2,6 +2,7 @@
 #include <MainProcessor.hpp>
 #include <Asteroid.hpp>
 #include <Ship.hpp>
+#include <Bullet.hpp>
 #include <List.hpp>
 #include <math.h>
 #include <iostream>
@@ -9,12 +10,13 @@
 #define PI 3.14159265
 
 void MainProcessor::Run() {
+    bool shoot = false;
     long int    frame_counter = 0;
     int         data_type;
     long double direction;
     sf::Vector2f direction_vector;
     Asteroid    *current_asteroid;
-//  Bullet      *currentBullet
+    Bullet      *current_bullet;
     sf::RenderWindow win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
     List object_list;
     object_list.PrintInfo();
@@ -36,13 +38,16 @@ void MainProcessor::Run() {
             current_asteroid = new Asteroid(window, resolution,
                                             ship.GetPosition());
             object_list.AppendAsteroid(current_asteroid);
+            object_list.PrintInfo();
         }
         // INPUT
         sf::Event event;
         while (window->pollEvent(event))
         {
             cursor_position = sf::Mouse::getPosition(*window);
-
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                shoot = true;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 ship.engine_on();
             } else {
@@ -58,6 +63,11 @@ void MainProcessor::Run() {
                 window->close();
             }
         }
+        if (shoot) {
+            current_bullet = new Bullet(&ship);
+            object_list.AppendBullet(current_bullet);
+            shoot = false;
+        }
         { // set ship direction
             direction_vector = sf::Vector2f(cursor_position.x-ship.GetPosition().x,
                                           cursor_position.y-ship.GetPosition().y);
@@ -68,20 +78,26 @@ void MainProcessor::Run() {
             ship.SetRotation(direction+90);
         }
         window->clear();
-        object_list.GoToStart();
         if (!object_list.GetCapacity()) {
             goto skip_object_render;
         }
+        object_list.GoToStart();
         do {
-
+            void *tmp = object_list.GetCurrentData();
             if (object_list.GetCurrentDataTypeId() == ASTEROID) {
-                void *tmp = object_list.GetCurrentData();
                 current_asteroid = static_cast<Asteroid*>(tmp);
                 current_asteroid->draw();
+            } else if (object_list.GetCurrentDataTypeId() == BULLET){
+                current_bullet = (Bullet*)tmp;
+                if (!current_bullet->IsAlive()){
+                    object_list.DeleteCurrentElement();
+                } else {
+                    current_bullet->draw();
+                }
             }
         } while (!object_list.NextElement());
 
-        skip_object_render:
+skip_object_render:
 
         ship.draw();
         window->display();

@@ -87,6 +87,7 @@ int List::DeleteCurrentElement() {
     count--;
     delete to_delete->data;
     delete to_delete;
+    std::cout << "delete object" << std::endl;
     return 0;
 }
 
