@@ -9,6 +9,7 @@ private:
 public:
     Ship(sf::Vector2f pos, sf::Vector2f sp,
          sf::RenderWindow *win, sf::Vector2i resolution);
+    Ship(sf::RenderWindow *win, sf::Vector2i resolution);
     ~Ship();
 
     void SetRotation(long double input_rotation);

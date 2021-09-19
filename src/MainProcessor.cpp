@@ -30,8 +30,10 @@ void MainProcessor::Run() {
               sf::Vector2f(0, 0), window,
               resolution);
 
-    object_list.AppendAsteroid(a1);
-    object_list.AppendAsteroid(a2);
+    Asteroid *a3 = new Asteroid(window, resolution, ship.GetPosition());
+    // object_list.AppendAsteroid(a1);
+    // object_list.AppendAsteroid(a2);
+    object_list.AppendAsteroid(a3);
 
 
     object_list.PrintInfo();
