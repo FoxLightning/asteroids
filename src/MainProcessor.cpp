@@ -9,6 +9,7 @@
 #define PI 3.14159265
 
 void MainProcessor::Run() {
+    long int    frame_counter = 0;
     int         data_type;
     long double direction;
     sf::Vector2f direction_vector;
@@ -20,21 +21,9 @@ void MainProcessor::Run() {
     win.setVerticalSyncEnabled(true);
     window = &win;
 
-    Asteroid *a1 = new Asteroid(sf::Vector2f(resolution),
-                             sf::Vector2f(1, 1), window,
-                             resolution);
-    Asteroid *a2 = new Asteroid(sf::Vector2f(resolution),
-                        sf::Vector2f(0, 1), window,
-                        resolution);
     Ship ship(sf::Vector2f(resolution/2),
               sf::Vector2f(0, 0), window,
               resolution);
-
-    Asteroid *a3 = new Asteroid(window, resolution, ship.GetPosition());
-    // object_list.AppendAsteroid(a1);
-    // object_list.AppendAsteroid(a2);
-    object_list.AppendAsteroid(a3);
-
 
     object_list.PrintInfo();
 
@@ -42,6 +31,12 @@ void MainProcessor::Run() {
     sf::Vector2i cursor_position = sf::Mouse::getPosition(*window);
     while (window->isOpen())
     {
+        frame_counter++;
+        if (!(frame_counter % (5 * 60))) {
+            current_asteroid = new Asteroid(window, resolution,
+                                            ship.GetPosition());
+            object_list.AppendAsteroid(current_asteroid);
+        }
         // INPUT
         sf::Event event;
         while (window->pollEvent(event))

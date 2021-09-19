@@ -8,7 +8,7 @@
 #define MARGIN              5
 #define MAX_SPEED           10
 #define MIN_SPEED           1
-#define MAX_ROTATION_SPEED  10
+#define MAX_ROTATION_SPEED  2
 
 Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
                    sf::RenderWindow *win, sf::Vector2i resolution) {
@@ -63,6 +63,7 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     ConvexShape.setPosition(position);
     ConvexShape.setRotation(rotation);
 
+    std::cout << "Asteroid randomly created with next parameters" << std::endl;
     std::cout << "position x: " << position.x << std::endl;
     std::cout << "position y: " << position.y << std::endl;
     std::cout << "speed x: "    << speed.x << std::endl;
