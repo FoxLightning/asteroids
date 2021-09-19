@@ -11,8 +11,7 @@ public:
          sf::RenderWindow *win, sf::Vector2i resolution);
     ~Ship();
 
-    void turn_left();
-    void turn_right();
+    void SetRotation(long double input_rotation);
     void engine_on();
     void engine_off();
     void fire();

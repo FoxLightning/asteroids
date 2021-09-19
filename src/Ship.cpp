@@ -67,18 +67,8 @@ void Ship::draw() {
     }
 }
 
-void Ship::turn_left() {
-    rotation -= 10;
-    if (rotation < 360) {
-        rotation += 360;
-    }
-}
-
-void Ship::turn_right() {
-    rotation += 10;
-    if (rotation > 360) {
-        rotation -= 360;
-    }
+void Ship::SetRotation(long double input_rotation) {
+    rotation = input_rotation;
 }
 
 void Ship::engine_on() {

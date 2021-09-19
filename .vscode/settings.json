@@ -4,7 +4,8 @@
                 "iostream": "cpp",
                 "array": "cpp",
                 "string": "cpp",
-                "string_view": "cpp"
+                "string_view": "cpp",
+                "random": "cpp"
         },
         "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -3,9 +3,15 @@
 #include <Asteroid.hpp>
 #include <Ship.hpp>
 #include <List.hpp>
+#include <math.h>
+#include <iostream>
+
+#define PI 3.14159265
 
 void MainProcessor::Run() {
     int         data_type;
+    long double direction;
+    sf::Vector2f direction_vector;
     Asteroid    *current_asteroid;
 //  Bullet      *currentBullet
     sf::RenderWindow win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
@@ -23,27 +29,23 @@ void MainProcessor::Run() {
     Ship ship(sf::Vector2f(resolution/2),
               sf::Vector2f(0, 0), window,
               resolution);
-    
+
     object_list.AppendAsteroid(a1);
     object_list.AppendAsteroid(a2);
 
 
     object_list.PrintInfo();
+
+
+    sf::Vector2i cursor_position = sf::Mouse::getPosition(*window);
     while (window->isOpen())
     {
         // INPUT
         sf::Event event;
         while (window->pollEvent(event))
         {
-            // rotation
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
-                ship.turn_left();
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            {
-                ship.turn_right();
-            }
+            cursor_position = sf::Mouse::getPosition(*window);
+
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 ship.engine_on();
             } else {
@@ -58,6 +60,15 @@ void MainProcessor::Run() {
             if (event.type == sf::Event::Closed) {
                 window->close();
             }
+        }
+        { // set ship direction
+            direction_vector = sf::Vector2f(cursor_position.x-ship.GetPosition().x,
+                                          cursor_position.y-ship.GetPosition().y);
+            direction = atan(direction_vector.y/direction_vector.x) * 180/PI;
+            if (direction_vector.x < 0) {
+                direction += 180;
+            }
+            ship.SetRotation(direction+90);
         }
         window->clear();
         object_list.GoToStart();
