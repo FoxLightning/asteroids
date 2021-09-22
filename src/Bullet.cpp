@@ -46,7 +46,6 @@ void Bullet::calculate() {
         position.x < 0 ||
         position.y > borders.y ||
         position.y < 0) {
-        std::cout << "bullet should be delete " << std::endl;
         alive = false;
     }
 }

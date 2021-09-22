@@ -3,7 +3,6 @@
 #include <Asteroid.hpp>
 #include <Ship.hpp>
 #include <Bullet.hpp>
-#include <List.hpp>
 #include <math.h>
 #include <iostream>
 #include <list>
@@ -30,11 +29,8 @@ void MainProcessor::Run() {
     int time_to_spawn = 1 * 60;
     bool shoot = false;
     long int    frame_counter = 0;
-    int         data_type;
     long double direction;
     sf::Vector2f direction_vector;
-    Asteroid    *current_asteroid;
-    Bullet      *current_bullet;
     sf::RenderWindow win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
     win.setVerticalSyncEnabled(true);
     window = &win;
@@ -54,7 +50,6 @@ void MainProcessor::Run() {
         frame_counter++;
         if (!(frame_counter % time_to_spawn)) {
             asteroids_list.push_back(Asteroid(window, resolution, ship.GetPosition()));
-            std::cout << bullet_list.size() << std::endl;
             frame_counter %= time_to_spawn;
             time_to_spawn -= 10;
             if (time_to_spawn < 1) {
@@ -65,9 +60,11 @@ void MainProcessor::Run() {
         sf::Event event;
         while (window->pollEvent(event))
         {
-            cursor_position = sf::Mouse::getPosition(*window);
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (event.type == sf::Event::MouseButtonPressed) {
                 shoot = true;
+            }
+            if (event.type == sf::Event::MouseButtonReleased) {
+                shoot = false;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 ship.engine_on();
@@ -83,10 +80,10 @@ void MainProcessor::Run() {
             if (event.type == sf::Event::Closed) {
                 window->close();
             }
+            cursor_position = sf::Mouse::getPosition(*window);
         }
         if (shoot) {
             bullet_list.push_back(Bullet(&ship));
-            shoot = false;
         }
         { // set ship direction
             direction_vector = sf::Vector2f(cursor_position.x-ship.GetPosition().x,

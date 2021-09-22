@@ -63,11 +63,11 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     ConvexShape.setPosition(position);
     ConvexShape.setRotation(rotation);
 
-    std::cout << "Asteroid randomly created with next parameters" << std::endl;
-    std::cout << "position x: " << position.x << std::endl;
-    std::cout << "position y: " << position.y << std::endl;
-    std::cout << "speed x: "    << speed.x << std::endl;
-    std::cout << "speed y: "    << speed.y << std::endl;
+    // std::cout << "Asteroid randomly created with next parameters" << std::endl;
+    // std::cout << "position x: " << position.x << std::endl;
+    // std::cout << "position y: " << position.y << std::endl;
+    // std::cout << "speed x: "    << speed.x << std::endl;
+    // std::cout << "speed y: "    << speed.y << std::endl;
 }
 
 Asteroid::~Asteroid() {
