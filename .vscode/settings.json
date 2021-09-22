@@ -6,7 +6,8 @@
                 "string": "cpp",
                 "string_view": "cpp",
                 "random": "cpp",
-                "ostream": "cpp"
+                "ostream": "cpp",
+                "*.tcc": "cpp"
         },
         "C_Cpp.errorSquiggles": "Disabled"
 }

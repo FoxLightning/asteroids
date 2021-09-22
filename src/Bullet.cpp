@@ -18,21 +18,21 @@ Bullet::Bullet(Ship *ship) {
 
     window = ship->window;
     ConvexShape.setPointCount(3);
-    ConvexShape.setPoint(0, sf::Vector2f(0.f, -10.f));
-    ConvexShape.setPoint(1, sf::Vector2f(-1.f, 10.f));
-    ConvexShape.setPoint(2, sf::Vector2f(1.f, 10.f));
+    ConvexShape.setPoint(0, sf::Vector2f(0.f, -1.f));
+    ConvexShape.setPoint(1, sf::Vector2f(-1.f, 0.f));
+    ConvexShape.setPoint(2, sf::Vector2f(1.f, 0.f));
     ConvexShape.setFillColor(sf::Color::Transparent);
     ConvexShape.setOutlineThickness(4.f);
     ConvexShape.setOutlineColor(sf::Color::Blue);
     ConvexShape.setPosition(position);
     ConvexShape.setRotation(rotation);
-    std::cout << "Crated bullet" << std::endl;
-    std::cout << "position x: " << position.x << std::endl;
-    std::cout << "position y: " << position.y << std::endl;
-    std::cout << "speed x: " << speed.x << std::endl;
-    std::cout << "speed y: " << speed.y << std::endl;
-    std::cout << "Crated bullet" << std::endl;
-    std::cout << "Crated bullet" << std::endl;
+    // std::cout << "Crated bullet" << std::endl;
+    // std::cout << "position x: " << position.x << std::endl;
+    // std::cout << "position y: " << position.y << std::endl;
+    // std::cout << "speed x: " << speed.x << std::endl;
+    // std::cout << "speed y: " << speed.y << std::endl;
+    // std::cout << "Crated bullet" << std::endl;
+    // std::cout << "Crated bullet" << std::endl;
 }
 
 Bullet::~Bullet() {

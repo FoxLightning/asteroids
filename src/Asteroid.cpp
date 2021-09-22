@@ -20,7 +20,7 @@ Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
     rotation            = 0.f;
     // visualisation
     rotation_speed      = 5.f;
-    radious             = 100.f;
+    radious             = 10000.f;
 
     window              = win;
     ConvexShape.setPointCount(5);
@@ -141,6 +141,14 @@ sf::Vector2f Asteroid::GetPosition() {
 
 long double Asteroid::GetRadious() {
     return radious;
+}
+
+void Asteroid::asteroid_die() {
+    alive = false;
+}
+
+bool Asteroid::IsAlive() {
+    return alive;
 }
 
 void Asteroid::draw() {

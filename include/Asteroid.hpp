@@ -19,4 +19,6 @@ public:
     virtual void draw();
     virtual long double GetRadious();
     virtual sf::Vector2f GetPosition();
+    bool IsAlive();
+    void asteroid_die();
 };
