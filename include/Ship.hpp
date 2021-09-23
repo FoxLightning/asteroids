@@ -1,9 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <AbstractPhysicalObject.hpp>
+#include <AbstractVisibleObject.hpp>
+#include <Bullet.hpp>
 
-class Ship :public AbstractPhysicalObject,
-            public AbstractPhysicalObjectInterface{
+class Ship: public AbstractPhysicalObject,
+            public AbstractVisibleObject
+{
+friend class Bullet;
 private:
     sf::Vector2f        acceleration;
 public:

@@ -1,11 +1,11 @@
 #pragma once
 #include <Ship.hpp>
+#include <AbstractPhysicalObject.hpp>
+#include <AbstractVisibleObject.hpp>
 
-class Bullet :private AbstractPhysicalObject,
-              public  AbstractPhysicalObjectInterface
+class Bullet: public AbstractPhysicalObject,
+              public AbstractVisibleObject
 {
-
-
 public:
     bool IsAlive();
     void calculate();

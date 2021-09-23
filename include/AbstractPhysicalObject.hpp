@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 class AbstractPhysicalObject {
-public:
+protected:
     // phisics
     sf::Vector2i        borders;
     bool                alive;
@@ -10,20 +10,11 @@ public:
     sf::Vector2f        speed;
     sf::Vector2f        acceleration;
     long double         radious;
-    // visualisation
     long double         rotation;
-    long double         outline_thickness;
-    sf::Color           fill_color;
-    sf::Color           outline_color;
-    sf::RenderWindow    *window;
-    sf::ConvexShape     ConvexShape;
-};
-
-
-class AbstractPhysicalObjectInterface {
 public:
     virtual void calculate() = 0;
     virtual sf::Vector2f GetPosition() = 0;
     virtual long double GetRadious() = 0;
-    virtual void draw() = 0;
+    AbstractPhysicalObject();
+    ~AbstractPhysicalObject();
 };

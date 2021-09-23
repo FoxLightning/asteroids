@@ -1,9 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <AbstractPhysicalObject.hpp>
+#include <AbstractVisibleObject.hpp>
 
-class Asteroid :private AbstractPhysicalObject,
-                public  AbstractPhysicalObjectInterface{
+class Asteroid: public AbstractPhysicalObject,
+                public AbstractVisibleObject
+{
 private:
     long double         rotation_speed;
     int setRandomPosition();
