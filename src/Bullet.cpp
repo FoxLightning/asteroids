@@ -2,6 +2,7 @@
 #include <Ship.hpp>
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
 
 #define BULLET_SPEED 20.f
 #define PI 3.14159265
@@ -13,8 +14,11 @@ Bullet::Bullet(Ship *ship) {
     borders = ship->borders;
     radious = 1.f;
     rotation = ship->rotation;
-    speed.x += cos((rotation-90)*PI/180.0)*BULLET_SPEED;
-    speed.y += sin((rotation-90)*PI/180.0)*BULLET_SPEED;
+
+    // srand(1231);
+    double accuracy = (199.f - rand() % 400) / 100.f;
+    speed.x += cos((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
+    speed.y += sin((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
 
     window = ship->window;
     ConvexShape.setPointCount(3);

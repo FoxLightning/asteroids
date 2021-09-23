@@ -43,7 +43,7 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     radious             = 100.f;
     window              = win;
 
-    srand(time(NULL));
+    // srand(time(NULL));
     setRandomPosition();
     setRandomSpeed(target);
     rotation        = rand() % 360;
@@ -79,7 +79,7 @@ int Asteroid::setRandomSpeed(sf::Vector2f target) {
     direction_vector.x = target.x - position.x;
     direction_vector.y = target.y - position.y;
     double direction = direction_vector.y / direction_vector.x;
-    double mod_speed = MIN_SPEED + rand() % (MAX_SPEED - MIN_SPEED);
+    double mod_speed = 20;//MIN_SPEED + rand() % (MAX_SPEED - MIN_SPEED);
     speed.x = mod_speed / (sqrt(1 + direction * direction));
     speed.y = speed.x * direction;
     if (direction_vector.x < 0) {
