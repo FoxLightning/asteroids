@@ -15,6 +15,4 @@ public:
     virtual void calculate() = 0;
     virtual sf::Vector2f GetPosition() = 0;
     virtual long double GetRadious() = 0;
-    AbstractPhysicalObject();
-    ~AbstractPhysicalObject();
 };

@@ -84,3 +84,8 @@ void Ship::engine_off() {
 void Ship::fire() {
     std::cout << "Пиу" << std::endl;
 }
+
+void Ship::AddSpeed(sf::Vector2f inp_speed) {
+    speed.x -= (inp_speed.x / 200);
+    speed.y -= (inp_speed.y / 200);
+}

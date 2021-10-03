@@ -12,6 +12,6 @@ public:
     sf::Vector2f GetPosition();
     long double GetRadious();
     void draw();
-    Bullet(Ship *ship);
+    Bullet(void *ship);
     ~Bullet();
 };

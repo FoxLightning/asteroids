@@ -16,6 +16,8 @@ public:
     Ship(sf::RenderWindow *win, sf::Vector2i resolution);
     ~Ship();
 
+    void AddSpeed(sf::Vector2f);
+
     void SetRotation(long double input_rotation);
     void engine_on();
     void engine_off();

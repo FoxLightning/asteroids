@@ -26,6 +26,8 @@ bool hit_bullet(sf::Vector2f asteroid_pos, sf::Vector2f bullet_pos, long double 
 }
 
 void MainProcessor::Run() {
+    int cooldown = 1;
+    int current_cooldown = 0;
     int time_to_spawn = 1 * 60;
     bool shoot = false;
     long int    frame_counter = 0;
@@ -47,14 +49,13 @@ void MainProcessor::Run() {
     sf::Vector2i cursor_position = sf::Mouse::getPosition(*window);
     while (window->isOpen())
     {
+        if (current_cooldown > 0) {
+            current_cooldown--;
+        }
         frame_counter++;
         if (!(frame_counter % time_to_spawn)) {
             asteroids_list.push_back(Asteroid(window, resolution, ship.GetPosition()));
             frame_counter %= time_to_spawn;
-            time_to_spawn -= 10;
-            if (time_to_spawn < 1) {
-                time_to_spawn = 5;
-            }
         }
         // INPUT
         sf::Event event;
@@ -66,7 +67,7 @@ void MainProcessor::Run() {
             if (event.type == sf::Event::MouseButtonReleased) {
                 shoot = false;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
                 ship.engine_on();
             } else {
                 ship.engine_off();
@@ -82,7 +83,8 @@ void MainProcessor::Run() {
             }
             cursor_position = sf::Mouse::getPosition(*window);
         }
-        if (shoot) {
+        if (shoot and !current_cooldown) {
+            current_cooldown = cooldown;
             bullet_list.push_back(Bullet(&ship));
         }
         { // set ship direction

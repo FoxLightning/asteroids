@@ -7,18 +7,20 @@
 #define BULLET_SPEED 20.f
 #define PI 3.14159265
 
-Bullet::Bullet(Ship *ship) {
+Bullet::Bullet(void *ship1) {
+    Ship *ship = static_cast<Ship*>(ship1);
     alive = true;
     position = ship->position;
     speed = ship->speed;
     borders = ship->borders;
-    radious = 1.f;
+    radious = 10.f;
     rotation = ship->rotation;
 
     // srand(1231);
-    double accuracy = (199.f - rand() % 400) / 100.f;
+    double accuracy = (399.f - rand() % 800) / 100.f;
     speed.x += cos((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
     speed.y += sin((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
+    ship->AddSpeed(speed);
 
     window = ship->window;
     ConvexShape.setPointCount(3);
