@@ -12,11 +12,15 @@ private:
     int                 dots_number;
     sf::Vector2f        *shape_dots;
 
+    // methods for random generation
     int setRandomPosition();
     int setRandomSpeed(sf::Vector2f target);
     void setRandomRadious();
     void setRandomDotsCount();
-    void setShape();
+    void setRandomDots();
+    void setRandomShape();
+    void setRandomRotationSpeed();
+    void setConvexShape();
 public:
     Asteroid(sf::Vector2f pos, sf::Vector2f sp,
              sf::RenderWindow *win, sf::Vector2i resolution);

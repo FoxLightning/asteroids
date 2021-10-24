@@ -14,7 +14,6 @@
 
 
 Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f target) {
-    // const
     borders             = resolution;
     alive               = true;
     radious             = 100.f;
@@ -23,11 +22,15 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     // srand(time(NULL));
     setRandomPosition();
     setRandomSpeed(target);
-    rotation        = rand() % 360;
-    rotation_speed  = rand() % MAX_ROTATION_SPEED;
-    setShape();
+    setRandomRotationSpeed();
+    setRandomShape();
+}
 
-    // the velocity vector must be directed towards the ship
+Asteroid::~Asteroid() {
+    delete[] shape_dots;
+}
+
+void Asteroid::setConvexShape() {
     ConvexShape.setPointCount(dots_number);
     for (int i = 0; i < dots_number; i++) {
         ConvexShape.setPoint(i, shape_dots[i]);
@@ -39,11 +42,13 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     ConvexShape.setRotation(rotation);
 }
 
-Asteroid::~Asteroid() {
-    delete[] shape_dots;
+void Asteroid::setRandomRotationSpeed() {
+    rotation        = rand() % 360;
+    rotation_speed  = rand() % MAX_ROTATION_SPEED;
 }
 
 void Asteroid::setRandomRadious() {
+    // radious can be random
     radious = MAX_RADIOUS;
 }
 
@@ -73,9 +78,7 @@ sf::Vector2f randomDot(float r, sf::Vector2f pos) {
     return res;
 }
 
-void Asteroid::setShape() {
-    setRandomRadious();
-    setRandomDotsCount();
+void Asteroid::setRandomDots() {
     shape_dots = new sf::Vector2f[dots_number];
     float r = radious * sin(PI / (float)dots_number);
     float step = 360.f/(float)dots_number;
@@ -90,6 +93,14 @@ void Asteroid::setShape() {
     for (int i = 0; i < dots_number; i++) {
         shape_dots[i] = randomDot(r, tmp_vec[i]);
     }
+}
+
+void Asteroid::setRandomShape() {
+    // call methods in right subsequence
+    setRandomRadious();
+    setRandomDotsCount();
+    setRandomDots();
+    setConvexShape();
 }
 
 int Asteroid::setRandomSpeed(sf::Vector2f target) {
@@ -109,11 +120,11 @@ int Asteroid::setRandomSpeed(sf::Vector2f target) {
 }
 
 int Asteroid::setRandomPosition() {
+    // genberate random position (it should be near the edges of the screen )
     if (borders.x < MARGIN*4 || borders.y < MARGIN*4) {
         return 1;
     }
-    // genberate random position (it should be near the edges of the screen )
-    // choose a edge of the screen 
+    // choose a edge of the screen
     switch (rand()%4)
     {
     case 0:
