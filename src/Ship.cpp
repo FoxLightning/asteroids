@@ -1,8 +1,7 @@
 #include <Ship.hpp>
 #include <math.h>
-#include <iostream>
+#include <CommonConst.hpp>
 
-#define PI 3.14159265
 
 Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
            sf::RenderWindow *win, sf::Vector2i resolution) {
@@ -81,9 +80,6 @@ void Ship::engine_off() {
     acceleration.y = 0;
 }
 
-void Ship::fire() {
-    std::cout << "Пиу" << std::endl;
-}
 
 void Ship::AddSpeed(sf::Vector2f inp_speed) {
     speed.x -= (inp_speed.x / 200);

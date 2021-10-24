@@ -4,10 +4,9 @@
 #include <Ship.hpp>
 #include <Bullet.hpp>
 #include <math.h>
-#include <iostream>
 #include <list>
+#include <CommonConst.hpp>
 
-#define PI 3.14159265
 
 bool b_is_not_alive(Bullet& bullet) { 
     return (!bullet.IsAlive()); 
@@ -73,9 +72,6 @@ void MainProcessor::Run() {
                 ship.engine_off();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                ship.fire();
             }
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed) {

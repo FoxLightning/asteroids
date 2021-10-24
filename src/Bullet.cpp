@@ -1,11 +1,10 @@
 #include "Bullet.hpp"
 #include <Ship.hpp>
 #include <cmath>
-#include <iostream>
 #include <stdlib.h>
+#include <CommonConst.hpp>
 
 #define BULLET_SPEED 20.f
-#define PI 3.14159265
 
 Bullet::Bullet(void *ship1) {
     Ship *ship = static_cast<Ship*>(ship1);
@@ -31,13 +30,6 @@ Bullet::Bullet(void *ship1) {
     ConvexShape.setOutlineColor(sf::Color::Blue);
     ConvexShape.setPosition(position);
     ConvexShape.setRotation(rotation);
-    // std::cout << "Crated bullet" << std::endl;
-    // std::cout << "position x: " << position.x << std::endl;
-    // std::cout << "position y: " << position.y << std::endl;
-    // std::cout << "speed x: " << speed.x << std::endl;
-    // std::cout << "speed y: " << speed.y << std::endl;
-    // std::cout << "Crated bullet" << std::endl;
-    // std::cout << "Crated bullet" << std::endl;
 }
 
 Bullet::~Bullet() {

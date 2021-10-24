@@ -2,10 +2,8 @@
 #include <Ship.hpp>
 #include <stdlib.h>
 #include <cmath>
+#include <CommonConst.hpp>
 
-#include <iostream>
-
-#define MARGIN              5
 #define MAX_SPEED           10
 #define MIN_SPEED           1
 #define MAX_ROTATION_SPEED  2
@@ -13,36 +11,8 @@
 #define MIN_RADIOUS         10
 #define MIN_DOTS_COUNT      7
 #define MAX_DOTS_COUNT      10
-#define PI                  3.14
-
-// Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
-//                    sf::RenderWindow *win, sf::Vector2i resolution) {
-//     // phisics
-//     borders             = resolution;
-//     alive               = true;
-//     position            = pos;
-//     speed               = sp;
-//     rotation            = 0.f;
-//     // visualisation
-//     rotation_speed      = 5.f;
-//     radious             = 10000.f;
-
-//     window              = win;
-//     ConvexShape.setPointCount(5);
-//     ConvexShape.setPoint(0, sf::Vector2f(0.f, -100.f));
-//     ConvexShape.setPoint(1, sf::Vector2f(100.f, -50.f));
-//     ConvexShape.setPoint(2, sf::Vector2f(70.f, 40.f));
-//     ConvexShape.setPoint(3, sf::Vector2f(-60.f, 50.f));
-//     ConvexShape.setPoint(4, sf::Vector2f(-40.f, -20.f));
-//     ConvexShape.setFillColor(sf::Color::Transparent);
-//     ConvexShape.setOutlineThickness(4.f);
-//     ConvexShape.setOutlineColor(sf::Color::Blue);
-//     ConvexShape.setPosition(position);
-//     ConvexShape.setRotation(rotation);
-// }
 
 Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f target) {
-    std::cout << "Create asteroid " << this << std::endl;
     // const
     borders             = resolution;
     alive               = true;
@@ -59,8 +29,6 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     // the velocity vector must be directed towards the ship
     ConvexShape.setPointCount(dots_number);
     for (int i = 0; i < dots_number; i++) {
-        std::cout << shape_dots[i].x << "  ";
-        std::cout << shape_dots[i].y << std::endl;
         ConvexShape.setPoint(i, shape_dots[i]);
     }
     ConvexShape.setFillColor(sf::Color::Transparent);
@@ -68,16 +36,9 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     ConvexShape.setOutlineColor(sf::Color::Blue);
     ConvexShape.setPosition(position);
     ConvexShape.setRotation(rotation);
-
-    // std::cout << "Asteroid randomly created with next parameters" << std::endl;
-    // std::cout << "position x: " << position.x << std::endl;
-    // std::cout << "position y: " << position.y << std::endl;
-    // std::cout << "speed x: "    << speed.x << std::endl;
-    // std::cout << "speed y: "    << speed.y << std::endl;
-    std::cout << "############" << std::endl;
 }
+
 Asteroid::~Asteroid() {
-    std::cout << "Delete asteroid " << this << std::endl;
     delete[] shape_dots;
 }
 
@@ -98,7 +59,6 @@ sf::Vector2f randomDot(float r, sf::Vector2f pos) {
     if (!mod_x) {
         mod_x = 1;
     }
-    std::cout << "mod x " << mod_x << std::endl;
 
     res.x = (float)(rand() % mod_x) / 100.f + min_x;
     float min_y = pos.y - sqrt(r*r - (res.x - pos.x)*(res.x - pos.x));
@@ -107,7 +67,6 @@ sf::Vector2f randomDot(float r, sf::Vector2f pos) {
     if (!mod_y) {
         mod_y = 1;
     }
-    std::cout << "mod y " << mod_y << std::endl;
 
     res.y = (float)(rand() % mod_y) / 100.f + min_y;
     return res;
@@ -116,7 +75,6 @@ sf::Vector2f randomDot(float r, sf::Vector2f pos) {
 void Asteroid::setShape() {
     setRandomRadious();
     setRandomDotsCount();
-    std::cout << dots_number << std::endl;
     shape_dots = new sf::Vector2f[dots_number];
     float r = radious * sin(PI / (float)dots_number);
     float step = 360.f/(float)dots_number;
