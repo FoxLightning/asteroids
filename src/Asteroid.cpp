@@ -16,10 +16,8 @@
 Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f target) {
     borders             = resolution;
     alive               = true;
-    radious             = 100.f;
     window              = win;
 
-    // srand(time(NULL));
     setRandomPosition();
     setRandomSpeed(target);
     setRandomRotationSpeed();
