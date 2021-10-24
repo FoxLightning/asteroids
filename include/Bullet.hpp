@@ -7,12 +7,16 @@
 class Bullet: public AbstractPhysicalObject,
               public AbstractVisibleObject
 {
+private:
+    void setSpeed(Ship *ship);
+    void setRecoil(Ship *ship);
+    void setShape();
 public:
     bool IsAlive();
     void calculate();
     sf::Vector2f GetPosition();
     long double GetRadious();
     void draw();
-    Bullet(void *ship);
+    Bullet(Ship *ship);
     ~Bullet();
 };

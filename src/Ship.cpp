@@ -7,14 +7,19 @@ Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
            sf::RenderWindow *win, sf::Vector2i resolution) {
     // phisics
     borders             = resolution;
-    alive               = true;
+    window              = win;
     position            = pos;
     speed               = sp;
+    alive               = true;
     rotation            = 0.f;
-    // visualisation
     radious             = 100.f;
 
-    window              = win;
+    setShape();
+}
+
+Ship::~Ship() {}
+
+void Ship::setShape() {
     ConvexShape.setPointCount(3);
     ConvexShape.setPoint(0, sf::Vector2f(0.f, -10.f));
     ConvexShape.setPoint(1, sf::Vector2f(-5.f, 10.f));
@@ -22,12 +27,6 @@ Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
     ConvexShape.setFillColor(sf::Color::Transparent);
     ConvexShape.setOutlineThickness(4.f);
     ConvexShape.setOutlineColor(sf::Color::Blue);
-    ConvexShape.setPosition(position);
-    ConvexShape.setRotation(rotation);
-}
-
-Ship::~Ship() {
-
 }
 
 void Ship::calculate() {
@@ -78,9 +77,4 @@ void Ship::engine_on() {
 void Ship::engine_off() {
     acceleration.x = 0;
     acceleration.y = 0;
-}
-
-void Ship::AddSpeed(sf::Vector2f inp_speed) {
-    speed.x -= (inp_speed.x / 200);
-    speed.y -= (inp_speed.y / 200);
 }

@@ -25,27 +25,31 @@ bool hit_bullet(sf::Vector2f asteroid_pos, sf::Vector2f bullet_pos, long double 
 }
 
 void MainProcessor::Run() {
-    int cooldown = 1;
-    int current_cooldown = 0;
-    int time_to_spawn = 1 * 60;
-    bool shoot = false;
-    long int    frame_counter = 0;
-    long double direction;
-    sf::Vector2f direction_vector;
-    sf::RenderWindow win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
-    win.setVerticalSyncEnabled(true);
+    int                 cooldown = 10;
+    int                 current_cooldown = 0;
+    int                 time_to_spawn = 1 * 60;
+    bool                shoot = false;
+    long int            frame_counter = 0;
+    long double         direction;
+    sf::Vector2f        direction_vector;
+    sf::RenderWindow    win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
     window = &win;
+    sf::Vector2i        cursor_position = sf::Mouse::getPosition(*window);
 
+    win.setVerticalSyncEnabled(true);
+
+    // create main ship
     Ship ship(sf::Vector2f(resolution/2),
               sf::Vector2f(0, 0), window,
               resolution);
-    // add quiues
+
+    // add lists
     std::list<Asteroid> asteroids_list;
-    std::list<Asteroid>::iterator asteroids_iterator;
     std::list<Bullet> bullet_list;
+    // add iterators
+    std::list<Asteroid>::iterator asteroids_iterator;
     std::list<Bullet>::iterator bullet_iterator;
 
-    sf::Vector2i cursor_position = sf::Mouse::getPosition(*window);
     while (window->isOpen())
     {
         if (current_cooldown > 0) {

@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <AbstractPhysicalObject.hpp>
 #include <AbstractVisibleObject.hpp>
-#include <Bullet.hpp>
 
 
 class Ship: public AbstractPhysicalObject,
@@ -11,13 +10,13 @@ class Ship: public AbstractPhysicalObject,
 friend class Bullet;
 private:
     sf::Vector2f        acceleration;
+
+    void setShape();
 public:
     Ship(sf::Vector2f pos, sf::Vector2f sp,
          sf::RenderWindow *win, sf::Vector2i resolution);
     Ship(sf::RenderWindow *win, sf::Vector2i resolution);
     ~Ship();
-
-    void AddSpeed(sf::Vector2f);
 
     void SetRotation(long double input_rotation);
     void engine_on();

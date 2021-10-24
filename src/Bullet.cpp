@@ -7,21 +7,27 @@
 #define BULLET_SPEED 20.f
 
 
-Bullet::Bullet(void *ship1) {
-    Ship *ship = static_cast<Ship*>(ship1);
-    alive = true;
-    position = ship->position;
-    speed = ship->speed;
-    borders = ship->borders;
-    radious = 10.f;
-    rotation = ship->rotation;
+Bullet::Bullet(Ship *ship) {
+    position    = ship->position;
+    speed       = ship->speed;
+    borders     = ship->borders;
+    rotation    = ship->rotation;
+    window      = ship->window;
+    alive       = true;
+    radious     = 10.f;
 
+    setSpeed(ship);
+    setRecoil(ship);
+    setShape();
+}
+
+void Bullet::setSpeed(Ship *ship) {
     double accuracy = (399.f - rand() % 800) / 100.f;
-    speed.x += cos((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
-    speed.y += sin((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
-    ship->AddSpeed(speed);
+    speed.x = ship->speed.x + cos((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
+    speed.y = ship->speed.y + sin((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
+}
 
-    window = ship->window;
+void Bullet::setShape() {
     ConvexShape.setPointCount(3);
     ConvexShape.setPoint(0, sf::Vector2f(0.f, -1.f));
     ConvexShape.setPoint(1, sf::Vector2f(-1.f, 0.f));
@@ -33,9 +39,12 @@ Bullet::Bullet(void *ship1) {
     ConvexShape.setRotation(rotation);
 }
 
-Bullet::~Bullet() {
-
+void Bullet::setRecoil(Ship *ship) {
+    ship->speed.x -= speed.x / 400.f;
+    ship->speed.y -= speed.y / 400.f;
 }
+
+Bullet::~Bullet() {}
 
 void Bullet::calculate() {
     position.x  += speed.x;
