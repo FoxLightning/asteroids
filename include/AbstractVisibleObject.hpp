@@ -9,4 +9,5 @@ protected:
     sf::ConvexShape     ConvexShape;
 public:
     virtual void draw() = 0;
+    virtual ~AbstractVisibleObject() {};
 };

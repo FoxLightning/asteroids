@@ -9,10 +9,11 @@ protected:
     sf::Vector2f        position;
     sf::Vector2f        speed;
     sf::Vector2f        acceleration;
-    long double         radious;
+    int                 radious;
     long double         rotation;
 public:
     virtual void calculate() = 0;
     virtual sf::Vector2f GetPosition() = 0;
     virtual long double GetRadious() = 0;
+    virtual ~AbstractPhysicalObject() {};
 };

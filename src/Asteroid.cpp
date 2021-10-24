@@ -9,34 +9,40 @@
 #define MAX_SPEED           10
 #define MIN_SPEED           1
 #define MAX_ROTATION_SPEED  2
+#define MAX_RADIOUS         50
+#define MIN_RADIOUS         10
+#define MIN_DOTS_COUNT      7
+#define MAX_DOTS_COUNT      10
+#define PI                  3.14
 
-Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
-                   sf::RenderWindow *win, sf::Vector2i resolution) {
-    // phisics
-    borders             = resolution;
-    alive               = true;
-    position            = pos;
-    speed               = sp;
-    rotation            = 0.f;
-    // visualisation
-    rotation_speed      = 5.f;
-    radious             = 10000.f;
+// Asteroid::Asteroid(sf::Vector2f pos, sf::Vector2f sp,
+//                    sf::RenderWindow *win, sf::Vector2i resolution) {
+//     // phisics
+//     borders             = resolution;
+//     alive               = true;
+//     position            = pos;
+//     speed               = sp;
+//     rotation            = 0.f;
+//     // visualisation
+//     rotation_speed      = 5.f;
+//     radious             = 10000.f;
 
-    window              = win;
-    ConvexShape.setPointCount(5);
-    ConvexShape.setPoint(0, sf::Vector2f(0.f, -100.f));
-    ConvexShape.setPoint(1, sf::Vector2f(100.f, -50.f));
-    ConvexShape.setPoint(2, sf::Vector2f(70.f, 40.f));
-    ConvexShape.setPoint(3, sf::Vector2f(-60.f, 50.f));
-    ConvexShape.setPoint(4, sf::Vector2f(-40.f, -20.f));
-    ConvexShape.setFillColor(sf::Color::Transparent);
-    ConvexShape.setOutlineThickness(4.f);
-    ConvexShape.setOutlineColor(sf::Color::Blue);
-    ConvexShape.setPosition(position);
-    ConvexShape.setRotation(rotation);
-}
+//     window              = win;
+//     ConvexShape.setPointCount(5);
+//     ConvexShape.setPoint(0, sf::Vector2f(0.f, -100.f));
+//     ConvexShape.setPoint(1, sf::Vector2f(100.f, -50.f));
+//     ConvexShape.setPoint(2, sf::Vector2f(70.f, 40.f));
+//     ConvexShape.setPoint(3, sf::Vector2f(-60.f, 50.f));
+//     ConvexShape.setPoint(4, sf::Vector2f(-40.f, -20.f));
+//     ConvexShape.setFillColor(sf::Color::Transparent);
+//     ConvexShape.setOutlineThickness(4.f);
+//     ConvexShape.setOutlineColor(sf::Color::Blue);
+//     ConvexShape.setPosition(position);
+//     ConvexShape.setRotation(rotation);
+// }
 
 Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f target) {
+    std::cout << "Create asteroid " << this << std::endl;
     // const
     borders             = resolution;
     alive               = true;
@@ -48,15 +54,15 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     setRandomSpeed(target);
     rotation        = rand() % 360;
     rotation_speed  = rand() % MAX_ROTATION_SPEED;
-
+    setShape();
 
     // the velocity vector must be directed towards the ship
-    ConvexShape.setPointCount(5);
-    ConvexShape.setPoint(0, sf::Vector2f(0.f, -100.f));
-    ConvexShape.setPoint(1, sf::Vector2f(100.f, -50.f));
-    ConvexShape.setPoint(2, sf::Vector2f(70.f, 40.f));
-    ConvexShape.setPoint(3, sf::Vector2f(-60.f, 50.f));
-    ConvexShape.setPoint(4, sf::Vector2f(-40.f, -20.f));
+    ConvexShape.setPointCount(dots_number);
+    for (int i = 0; i < dots_number; i++) {
+        std::cout << shape_dots[i].x << "  ";
+        std::cout << shape_dots[i].y << std::endl;
+        ConvexShape.setPoint(i, shape_dots[i]);
+    }
     ConvexShape.setFillColor(sf::Color::Transparent);
     ConvexShape.setOutlineThickness(4.f);
     ConvexShape.setOutlineColor(sf::Color::Blue);
@@ -68,9 +74,63 @@ Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f 
     // std::cout << "position y: " << position.y << std::endl;
     // std::cout << "speed x: "    << speed.x << std::endl;
     // std::cout << "speed y: "    << speed.y << std::endl;
+    std::cout << "############" << std::endl;
+}
+Asteroid::~Asteroid() {
+    std::cout << "Delete asteroid " << this << std::endl;
+    delete[] shape_dots;
 }
 
-Asteroid::~Asteroid() {
+void Asteroid::setRandomRadious() {
+    radious = MAX_RADIOUS;
+}
+
+void Asteroid::setRandomDotsCount() {
+    dots_number = rand() % MAX_DOTS_COUNT + MIN_DOTS_COUNT;
+}
+
+sf::Vector2f randomDot(float r, sf::Vector2f pos) {
+    sf::Vector2f res;
+    float min_x = pos.x - r;
+    float max_x = pos.x + r;
+
+    unsigned int mod_x = (unsigned int)((max_x - min_x) * 100);
+    if (!mod_x) {
+        mod_x = 1;
+    }
+    std::cout << "mod x " << mod_x << std::endl;
+
+    res.x = (float)(rand() % mod_x) / 100.f + min_x;
+    float min_y = pos.y - sqrt(r*r - (res.x - pos.x)*(res.x - pos.x));
+    float max_y = pos.y + sqrt(r*r - (res.x - pos.x)*(res.x - pos.x));
+    unsigned int mod_y = (unsigned int)((max_y - min_y) * 100);
+    if (!mod_y) {
+        mod_y = 1;
+    }
+    std::cout << "mod y " << mod_y << std::endl;
+
+    res.y = (float)(rand() % mod_y) / 100.f + min_y;
+    return res;
+}
+
+void Asteroid::setShape() {
+    setRandomRadious();
+    setRandomDotsCount();
+    std::cout << dots_number << std::endl;
+    shape_dots = new sf::Vector2f[dots_number];
+    float r = radious * sin(PI / (float)dots_number);
+    float step = 360.f/(float)dots_number;
+    sf::Vector2f tmp;
+    sf::Vector2f tmp_vec[dots_number];
+    sf::Vector2f *tmpPtr = tmp_vec;
+    for (float i=0; i<dots_number; i++, tmpPtr++) {
+        tmp.x = (float)radious * sin(2*PI*i*step/360.f);
+        tmp.y = (float)radious * cos(2*PI*i*step/360.f);
+        *tmpPtr = tmp;
+    }
+    for (int i = 0; i < dots_number; i++) {
+        shape_dots[i] = randomDot(r, tmp_vec[i]);
+    }
 }
 
 int Asteroid::setRandomSpeed(sf::Vector2f target) {
@@ -79,7 +139,7 @@ int Asteroid::setRandomSpeed(sf::Vector2f target) {
     direction_vector.x = target.x - position.x;
     direction_vector.y = target.y - position.y;
     double direction = direction_vector.y / direction_vector.x;
-    double mod_speed = 20;//MIN_SPEED + rand() % (MAX_SPEED - MIN_SPEED);
+    double mod_speed = 10;
     speed.x = mod_speed / (sqrt(1 + direction * direction));
     speed.y = speed.x * direction;
     if (direction_vector.x < 0) {
@@ -157,5 +217,29 @@ void Asteroid::draw() {
         ConvexShape.setPosition(position);
         ConvexShape.setRotation(rotation);
         window->draw(ConvexShape);
+    }
+}
+
+Asteroid::Asteroid(const Asteroid &other) {
+    this->outline_thickness = other.outline_thickness;
+    this->fill_color = other.fill_color;
+    this->outline_color = other.outline_color;
+    this->window = other.window;
+    this->ConvexShape = other.ConvexShape;
+
+    this->borders = other.borders;
+    this->alive = other.alive;
+    this->position = other.position;
+    this->speed = other.speed;
+    this->acceleration = other.acceleration;
+    this->radious = other.radious;
+    this->rotation = other.rotation;
+
+    this->rotation_speed = other.rotation_speed;
+    this->dots_number = other.dots_number;
+
+    this->shape_dots = new sf::Vector2f[other.dots_number];
+    for (int i = 0; i < other.dots_number; i++) {
+        this->shape_dots[i] = other.shape_dots[i];
     }
 }

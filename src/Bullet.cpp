@@ -16,7 +16,6 @@ Bullet::Bullet(void *ship1) {
     radious = 10.f;
     rotation = ship->rotation;
 
-    // srand(1231);
     double accuracy = (399.f - rand() % 800) / 100.f;
     speed.x += cos((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
     speed.y += sin((rotation-90+accuracy)*PI/180.0)*BULLET_SPEED;
