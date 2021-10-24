@@ -4,6 +4,7 @@
 #include <AbstractVisibleObject.hpp>
 #include <Bullet.hpp>
 
+
 class Ship: public AbstractPhysicalObject,
             public AbstractVisibleObject
 {

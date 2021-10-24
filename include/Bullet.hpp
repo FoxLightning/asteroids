@@ -3,6 +3,7 @@
 #include <AbstractPhysicalObject.hpp>
 #include <AbstractVisibleObject.hpp>
 
+
 class Bullet: public AbstractPhysicalObject,
               public AbstractVisibleObject
 {

@@ -12,6 +12,7 @@
 #define MIN_DOTS_COUNT      7
 #define MAX_DOTS_COUNT      10
 
+
 Asteroid::Asteroid(sf::RenderWindow *win, sf::Vector2i resolution, sf::Vector2f target) {
     // const
     borders             = resolution;

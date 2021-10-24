@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+
 class AbstractPhysicalObject {
 protected:
     // phisics

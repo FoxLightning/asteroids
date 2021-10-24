@@ -3,6 +3,7 @@
 #include <AbstractPhysicalObject.hpp>
 #include <AbstractVisibleObject.hpp>
 
+
 class Asteroid: public AbstractPhysicalObject,
                 public AbstractVisibleObject
 {

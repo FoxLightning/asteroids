@@ -6,6 +6,7 @@
 
 #define BULLET_SPEED 20.f
 
+
 Bullet::Bullet(void *ship1) {
     Ship *ship = static_cast<Ship*>(ship1);
     alive = true;
@@ -46,12 +47,15 @@ void Bullet::calculate() {
         alive = false;
     }
 }
+
 sf::Vector2f Bullet::GetPosition() {
     return position;
-};
+}
+
 long double Bullet::GetRadious() {
     return radious;
 }
+
 bool Bullet::IsAlive() {
     return alive;
 }

@@ -80,7 +80,6 @@ void Ship::engine_off() {
     acceleration.y = 0;
 }
 
-
 void Ship::AddSpeed(sf::Vector2f inp_speed) {
     speed.x -= (inp_speed.x / 200);
     speed.y -= (inp_speed.y / 200);

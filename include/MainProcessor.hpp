@@ -2,6 +2,7 @@
 #include <Ship.hpp>
 #include <Asteroid.hpp>
 
+
 class MainProcessor {
     sf::RenderWindow    *window;
     sf::Vector2i        resolution;
