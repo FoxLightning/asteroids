@@ -6,6 +6,8 @@
 #include <math.h>
 #include <list>
 #include <CommonConst.hpp>
+#include <AbstractPhysicalObject.hpp>
+#include <AbstractVisibleObject.hpp>
 
 
 bool b_is_not_alive(Bullet& bullet) { 
@@ -22,6 +24,71 @@ bool hit_bullet(sf::Vector2f asteroid_pos, sf::Vector2f bullet_pos, long double 
         return true;
     }
     return false;
+}
+
+float DotProduct(sf::Vector2f rv, sf::Vector2f normal) {
+        return (rv.x * normal.x + rv.y * normal.y) / sqrt(pow(normal.x, 2) + pow(normal.y, 2));
+}
+
+// void resolve_collision(std::__cxx11::list<AbstractPhysicalObject>::iterator&A, std::__cxx11::list<AbstractPhysicalObject>::iterator&B) {
+//     // Вычисляем относительную скорость
+//     sf::Vector2f rv = B->GetSpeed()- A->GetSpeed();
+//     sf::Vector2f normal = B->GetPosition() - A->GetPosition();
+//     float normal_k = sqrt(pow(normal.x, 2) + pow(normal.y, 2));
+//     normal.x /= normal_k;
+//     normal.y /= normal_k;
+
+//     // Вычисляем относительную скорость относительно направления нормали
+//     float velAlongNormal = DotProduct(rv, normal);
+
+//     // Не выполняем вычислений, если скорости разделены
+//     if(velAlongNormal > 0) {
+//             return;
+//     }
+
+//     // Вычисляем упругость
+//     float e = 1;
+
+//     // Вычисляем скаляр импульса силы
+//     float j = -(1 + e) * velAlongNormal;
+//     // j /= 1 / A->mass + 1 / B->mass;
+//     j /= 1 / 1 + 1 / 1;
+
+//     // Прикладываем импульс силы
+//     sf::Vector2f impulse = j * normal;
+//     // A->velocity -= 1 / A->mass * impulse;
+//     // B->velocity += 1 / B->mass * impulse;
+//     A->SetSpeed(A->GetSpeed()-impulse);
+//     B->SetSpeed(B->GetSpeed()+impulse);
+
+//     // std::cout << "velAlongNormal: " << velAlongNormal << std::endl;
+//     // std::cout << "impulse" << impulse.x << std::endl;
+//     // std::cout << "impulse" << impulse.y << std::endl;
+//     // std::cout << "Av x: " << A->velocity.x << std::endl;
+//     // std::cout << "Av y: " << A->velocity.y << std::endl;
+//     // std::cout << "Bv x: " << B->velocity.x << std::endl;
+//     // std::cout << "Bv y: " << B->velocity.y << std::endl;
+// }
+
+void check_colision(std::list<void*> &common_list) {
+    std::list<AbstractPhysicalObject*> collaps_list;
+    for (void* cur_list: common_list) {
+        for (auto cur_obj: (std::list<AbstractPhysicalObject>)cur_list) {
+            collaps_list.push_back(&cur_obj);
+        }
+    }
+    std::list<AbstractPhysicalObject>::iterator common_iterator_left;
+    std::list<AbstractPhysicalObject>::iterator common_iterator_right;
+
+    for (common_iterator_left=collaps_list.begin();
+         common_iterator_left!=collaps_list.end();
+         common_iterator_left++) {
+        for (common_iterator_right=common_iterator_left;
+             common_iterator_right!=common_iterator_right.end();
+             common_iterator_right++) {
+            // resolve_collision(common_iterator_left, common_iterator_right);
+        }
+    }
 }
 
 void MainProcessor::Run() {
@@ -44,8 +111,12 @@ void MainProcessor::Run() {
               resolution);
 
     // add lists
-    std::list<Asteroid> asteroids_list;
-    std::list<Bullet> bullet_list;
+    std::list<AbstractPhysicalObject*> common_apo_list;
+    std::list<AbstractVisibleObject*> common_avo_list;
+    std::list<Asteroid*> asteroids_list;
+    std::list<Bullet*> bullet_list;
+    std::list<Ship*> ship_list;
+
     // add iterators
     std::list<Asteroid>::iterator asteroids_iterator;
     std::list<Bullet>::iterator bullet_iterator;
@@ -57,7 +128,12 @@ void MainProcessor::Run() {
         }
         frame_counter++;
         if (!(frame_counter % time_to_spawn)) {
-            asteroids_list.push_back(Asteroid(window, resolution, ship.GetPosition()));
+            auto *tmp = new Asteroid(window, resolution, ship.GetPosition());
+
+            // TODO make class context
+            asteroids_list.push_back(tmp);
+            common_apo_list.push_back(tmp);
+
             frame_counter %= time_to_spawn;
         }
         // INPUT
@@ -85,7 +161,9 @@ void MainProcessor::Run() {
         }
         if (shoot and !current_cooldown) {
             current_cooldown = cooldown;
-            bullet_list.push_back(Bullet(&ship));
+            auto *tmp = new Bullet(&ship);
+            bullet_list.push_back(tmp);
+            common_apo_list.push_back(tmp);
         }
         { // set ship direction
             direction_vector = sf::Vector2f(cursor_position.x-ship.GetPosition().x,
@@ -97,28 +175,16 @@ void MainProcessor::Run() {
             ship.SetRotation(direction+90);
         }
 
-        bullet_list.remove_if(b_is_not_alive);
-        asteroids_list.remove_if(a_is_not_alive);
+        // bullet_list.remove_if(b_is_not_alive);
+        // asteroids_list.remove_if(a_is_not_alive);
+
+
         window->clear();
-        for (asteroids_iterator=asteroids_list.begin();
-             asteroids_iterator!=asteroids_list.end();
-             asteroids_iterator++) {
-            asteroids_iterator->draw();
+        for (auto &object: asteroids_list) {
+            object->draw();
         }
-        for (bullet_iterator=bullet_list.begin();
-             bullet_iterator!=bullet_list.end();
-             bullet_iterator++) {
-            sf::Vector2f bp = bullet_iterator->GetPosition();
-            for (asteroids_iterator=asteroids_list.begin();
-                asteroids_iterator!=asteroids_list.end();
-                asteroids_iterator++) {
-                sf::Vector2f ap = asteroids_iterator->GetPosition();
-                long double ar = asteroids_iterator->GetRadious();
-                if (hit_bullet(ap, bp, ar)) {
-                    asteroids_iterator->asteroid_die();
-                }
-            }
-            bullet_iterator->draw();
+        for (auto &object: bullet_list) {
+            object->draw();
         }
         ship.draw();
         window->display();

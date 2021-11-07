@@ -48,10 +48,6 @@ void Ship::calculate() {
     }
 }
 
-sf::Vector2f Ship::GetPosition() {
-    return position;
-}
-
 long double Ship::GetRadious() {
     return radious;
 }

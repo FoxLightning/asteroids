@@ -31,7 +31,6 @@ public:
     void calculate();
     void draw();
     long double GetRadious();
-    sf::Vector2f GetPosition();
     bool IsAlive();
     void asteroid_die();
 

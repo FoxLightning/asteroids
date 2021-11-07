@@ -163,10 +163,6 @@ void Asteroid::calculate() {
     }
 }
 
-sf::Vector2f Asteroid::GetPosition() {
-    return position;
-}
-
 long double Asteroid::GetRadious() {
     return radious;
 }

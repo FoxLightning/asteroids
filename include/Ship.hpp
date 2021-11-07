@@ -24,7 +24,6 @@ public:
     void fire();
 
     void calculate();
-    sf::Vector2f GetPosition();
     long double GetRadious();
     void draw();
 };

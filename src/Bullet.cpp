@@ -57,10 +57,6 @@ void Bullet::calculate() {
     }
 }
 
-sf::Vector2f Bullet::GetPosition() {
-    return position;
-}
-
 long double Bullet::GetRadious() {
     return radious;
 }
