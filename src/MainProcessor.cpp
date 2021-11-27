@@ -8,6 +8,7 @@
 #include <CommonConst.hpp>
 #include <AbstractPhysicalObject.hpp>
 #include <AbstractVisibleObject.hpp>
+#include <iostream>
 
 
 bool b_is_not_alive(Bullet& bullet) { 
@@ -30,74 +31,102 @@ float DotProduct(sf::Vector2f rv, sf::Vector2f normal) {
         return (rv.x * normal.x + rv.y * normal.y) / sqrt(pow(normal.x, 2) + pow(normal.y, 2));
 }
 
-// void resolve_collision(std::__cxx11::list<AbstractPhysicalObject>::iterator&A, std::__cxx11::list<AbstractPhysicalObject>::iterator&B) {
-//     // Вычисляем относительную скорость
-//     sf::Vector2f rv = B->GetSpeed()- A->GetSpeed();
-//     sf::Vector2f normal = B->GetPosition() - A->GetPosition();
-//     float normal_k = sqrt(pow(normal.x, 2) + pow(normal.y, 2));
-//     normal.x /= normal_k;
-//     normal.y /= normal_k;
+void ResolveColision(AbstractPhysicalObject* A, AbstractPhysicalObject* B) {
+    // Вычисляем относительную скорость
+    sf::Vector2f rv = B->GetSpeed()- A->GetSpeed();
+    sf::Vector2f normal = B->GetPosition() - A->GetPosition();
+    float normal_k = sqrt(pow(normal.x, 2) + pow(normal.y, 2));
+    normal.x /= normal_k;
+    normal.y /= normal_k;
 
-//     // Вычисляем относительную скорость относительно направления нормали
-//     float velAlongNormal = DotProduct(rv, normal);
+    // Вычисляем относительную скорость относительно направления нормали
+    float velAlongNormal = DotProduct(rv, normal);
 
-//     // Не выполняем вычислений, если скорости разделены
-//     if(velAlongNormal > 0) {
-//             return;
-//     }
-
-//     // Вычисляем упругость
-//     float e = 1;
-
-//     // Вычисляем скаляр импульса силы
-//     float j = -(1 + e) * velAlongNormal;
-//     // j /= 1 / A->mass + 1 / B->mass;
-//     j /= 1 / 1 + 1 / 1;
-
-//     // Прикладываем импульс силы
-//     sf::Vector2f impulse = j * normal;
-//     // A->velocity -= 1 / A->mass * impulse;
-//     // B->velocity += 1 / B->mass * impulse;
-//     A->SetSpeed(A->GetSpeed()-impulse);
-//     B->SetSpeed(B->GetSpeed()+impulse);
-
-//     // std::cout << "velAlongNormal: " << velAlongNormal << std::endl;
-//     // std::cout << "impulse" << impulse.x << std::endl;
-//     // std::cout << "impulse" << impulse.y << std::endl;
-//     // std::cout << "Av x: " << A->velocity.x << std::endl;
-//     // std::cout << "Av y: " << A->velocity.y << std::endl;
-//     // std::cout << "Bv x: " << B->velocity.x << std::endl;
-//     // std::cout << "Bv y: " << B->velocity.y << std::endl;
-// }
-
-
-void check_colision(std::list<void*> &common_list) {
-    std::list<AbstractPhysicalObject*> collaps_list;
-    for (void* cur_list: common_list) {
-        for (auto cur_obj: (std::list<AbstractPhysicalObject>)cur_list) {
-            collaps_list.push_back(&cur_obj);
-        }
+    // Не выполняем вычислений, если скорости разделены
+    if(velAlongNormal > 0) {
+            return;
     }
-    std::list<AbstractPhysicalObject>::iterator common_iterator_left;
-    std::list<AbstractPhysicalObject>::iterator common_iterator_right;
 
-    for (common_iterator_left=collaps_list.begin();
-         common_iterator_left!=collaps_list.end();
-         common_iterator_left++) {
-        for (common_iterator_right=common_iterator_left;
-             common_iterator_right!=common_iterator_right.end();
-             common_iterator_right++) {
-            // resolve_collision(common_iterator_left, common_iterator_right);
+    // Вычисляем упругость
+    float e = 1;
+
+    // Вычисляем скаляр импульса силы
+    float j = -(1 + e) * velAlongNormal;
+    // j /= 1 / A->mass + 1 / B->mass;
+    j /= 1 / 1 + 1 / 1;
+
+    // Прикладываем импульс силы
+    sf::Vector2f impulse = j * normal;
+    // A->velocity -= 1 / A->mass * impulse;
+    // B->velocity += 1 / B->mass * impulse;
+    A->SetSpeed(A->GetSpeed()-impulse);
+    B->SetSpeed(B->GetSpeed()+impulse);
+}
+
+bool CheckColision(AbstractPhysicalObject* lvalue, AbstractPhysicalObject* rvalue) {
+    sf::Vector2f    PosA = lvalue->GetPosition();
+    float           RadA = lvalue->GetRadious();
+    sf::Vector2f    PosB = rvalue->GetPosition();
+    float           RadB = rvalue->GetRadious();
+
+    return pow(PosA.x - PosB.x, 2) + pow(PosA.y - PosB.y, 2) < pow(RadA + RadB, 2);
+
+}
+
+std::list<AbstractPhysicalObject*> GetColisionCoupleList(std::list<AbstractPhysicalObject*> &object_list) {
+    std::list<AbstractPhysicalObject*> colision_object_list;
+    int skip = 0;
+    int count = 0;
+
+    for (AbstractPhysicalObject* lvalue: object_list) {
+        for(AbstractPhysicalObject* rvalue: object_list) {
+            if (count > skip && CheckColision(lvalue, rvalue)) {
+                colision_object_list.push_back(lvalue);
+                colision_object_list.push_back(rvalue);
+            }
+            count++;
         }
+        skip++;
+        count = 0;
     }
+    return colision_object_list;
+}
+
+
+std::list<AbstractPhysicalObject*> MainProcessor::GetAbstractPhisicalObjectList() {
+    std::list<AbstractPhysicalObject*> object_list;
+    for (auto object: global_context.asteroids_list) {
+        object_list.push_back(static_cast<AbstractPhysicalObject*>(object));
+    }
+    for (auto object: global_context.bullet_list) {
+        object_list.push_back(static_cast<AbstractPhysicalObject*>(object));
+    }
+    for (auto object: global_context.ship_list) {
+        object_list.push_back(static_cast<AbstractPhysicalObject*>(object));
+    }
+    return object_list;
+}
+
+std::list<AbstractVisibleObject*> MainProcessor::GetAbstractVisibleObjectList() {
+    std::list<AbstractVisibleObject*> object_list;
+    for (auto object: global_context.asteroids_list) {
+        object_list.push_back(static_cast<AbstractVisibleObject*>(object));
+    }
+    for (auto object: global_context.bullet_list) {
+        object_list.push_back(static_cast<AbstractVisibleObject*>(object));
+    }
+    for (auto object: global_context.ship_list) {
+        object_list.push_back(static_cast<AbstractVisibleObject*>(object));
+    }
+    return object_list;
 }
 
 void MainProcessor::Run() {
     int                 cooldown = 10;
     int                 current_cooldown = 0;
-    int                 time_to_spawn = 1 * 60;
+    int                 time_to_spawn = 1 * 60*60;
     bool                shoot = false;
-    long int            frame_counter = 0;
+    long int            frame_counter = 60*59;
     long double         direction;
     sf::Vector2f        direction_vector;
     sf::RenderWindow    win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
@@ -110,17 +139,7 @@ void MainProcessor::Run() {
     Ship ship(sf::Vector2f(resolution/2),
               sf::Vector2f(0, 0), window,
               resolution);
-
-    // add lists
-    std::list<AbstractPhysicalObject*> common_apo_list;
-    std::list<AbstractVisibleObject*> common_avo_list;
-    std::list<Asteroid*> asteroids_list;
-    std::list<Bullet*> bullet_list;
-    std::list<Ship*> ship_list;
-
-    // add iterators
-    std::list<Asteroid>::iterator asteroids_iterator;
-    std::list<Bullet>::iterator bullet_iterator;
+    global_context.ship_list.push_back(&ship);
 
     while (window->isOpen())
     {
@@ -129,11 +148,10 @@ void MainProcessor::Run() {
         }
         frame_counter++;
         if (!(frame_counter % time_to_spawn)) {
-            auto *tmp = new Asteroid(window, resolution, ship.GetPosition());
+            Asteroid *tmp = new Asteroid(window, resolution, ship.GetPosition());
 
             // TODO make class context
-            asteroids_list.push_back(tmp);
-            common_apo_list.push_back(tmp);
+            global_context.asteroids_list.push_back(tmp);
 
             frame_counter %= time_to_spawn;
         }
@@ -163,8 +181,7 @@ void MainProcessor::Run() {
         if (shoot and !current_cooldown) {
             current_cooldown = cooldown;
             auto *tmp = new Bullet(&ship);
-            bullet_list.push_back(tmp);
-            common_apo_list.push_back(tmp);
+            global_context.bullet_list.push_back(tmp);
         }
         { // set ship direction
             direction_vector = sf::Vector2f(cursor_position.x-ship.GetPosition().x,
@@ -176,18 +193,24 @@ void MainProcessor::Run() {
             ship.SetRotation(direction+90);
         }
 
-        // bullet_list.remove_if(b_is_not_alive);
-        // asteroids_list.remove_if(a_is_not_alive);
-
+        // collision check
+        auto v = GetAbstractPhisicalObjectList();
+        auto col_c = GetColisionCoupleList(v);
+        AbstractPhysicalObject* prev = NULL;
+        for (AbstractPhysicalObject* cur: GetColisionCoupleList(col_c)) {
+            if (prev == NULL) {
+                prev = cur;
+            } else {
+                ResolveColision(prev, cur);
+                prev = NULL;
+            }
+        }
 
         window->clear();
-        for (auto &object: asteroids_list) {
-            object->draw();
-        }
-        for (auto &object: bullet_list) {
-            object->draw();
-        }
         ship.draw();
+        for(auto obj: GetAbstractVisibleObjectList()) {
+            obj->draw();
+        }
         window->display();
     }
 }

@@ -12,7 +12,7 @@ Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
     speed               = sp;
     alive               = true;
     rotation            = 0.f;
-    radious             = 100.f;
+    radious             = 10.f;
 
     setShape();
 }

@@ -14,11 +14,13 @@ Bullet::Bullet(Ship *ship) {
     rotation    = ship->rotation;
     window      = ship->window;
     alive       = true;
-    radious     = 10.f;
+    radious     = 1.f;
 
     setSpeed(ship);
     setRecoil(ship);
     setShape();
+    // We calculate the step of the bullet so that it does not end up inside the ship
+    calculate();
 }
 
 void Bullet::setSpeed(Ship *ship) {
