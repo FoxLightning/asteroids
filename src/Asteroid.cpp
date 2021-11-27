@@ -2,7 +2,7 @@
 #include <Ship.hpp>
 #include <stdlib.h>
 #include <cmath>
-#include <CommonConst.hpp>
+#include <commonConst.hpp>
 
 #define MAX_SPEED           10
 #define MIN_SPEED           1

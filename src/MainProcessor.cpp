@@ -5,9 +5,10 @@
 #include <Bullet.hpp>
 #include <math.h>
 #include <list>
-#include <CommonConst.hpp>
+#include <commonConst.hpp>
 #include <AbstractPhysicalObject.hpp>
 #include <AbstractVisibleObject.hpp>
+#include <algorithms.hpp>
 #include <iostream>
 
 
@@ -19,58 +20,7 @@ bool a_is_not_alive(Asteroid& asteroid) {
     return (!asteroid.IsAlive()); 
 }
 
-bool hit_bullet(sf::Vector2f asteroid_pos, sf::Vector2f bullet_pos, long double asteroid_radious) {
-    if (
-        std::pow((bullet_pos.x - asteroid_pos.x), 2) + std::pow((bullet_pos.y - asteroid_pos.y), 2) < std::pow(asteroid_radious, 2)) {
-        return true;
-    }
-    return false;
-}
-
-float DotProduct(sf::Vector2f rv, sf::Vector2f normal) {
-        return (rv.x * normal.x + rv.y * normal.y) / sqrt(pow(normal.x, 2) + pow(normal.y, 2));
-}
-
-void ResolveColision(AbstractPhysicalObject* A, AbstractPhysicalObject* B) {
-    // Вычисляем относительную скорость
-    sf::Vector2f rv = B->GetSpeed()- A->GetSpeed();
-    sf::Vector2f normal = B->GetPosition() - A->GetPosition();
-    float normal_k = sqrt(pow(normal.x, 2) + pow(normal.y, 2));
-    normal.x /= normal_k;
-    normal.y /= normal_k;
-
-    // Вычисляем относительную скорость относительно направления нормали
-    float velAlongNormal = DotProduct(rv, normal);
-
-    // Не выполняем вычислений, если скорости разделены
-    if(velAlongNormal > 0) {
-            return;
-    }
-
-    // Вычисляем упругость
-    float e = 0.5;
-
-    // Вычисляем скаляр импульса силы
-    float j = -(1 + e) * velAlongNormal;
-    j /= 1.f / A->GetMass() + 1.f / B->GetMass();
-
-    // Прикладываем импульс силы
-    sf::Vector2f impulse = j * normal;
-    A->SetSpeed(A->GetSpeed()-1.f/A->GetMass()*impulse);
-    B->SetSpeed(B->GetSpeed()+1.f/B->GetMass()*impulse);
-}
-
-bool CheckColision(AbstractPhysicalObject* lvalue, AbstractPhysicalObject* rvalue) {
-    sf::Vector2f    PosA = lvalue->GetPosition();
-    float           RadA = lvalue->GetRadious();
-    sf::Vector2f    PosB = rvalue->GetPosition();
-    float           RadB = rvalue->GetRadious();
-
-    return pow(PosA.x - PosB.x, 2) + pow(PosA.y - PosB.y, 2) < pow(RadA + RadB, 2);
-
-}
-
-std::list<AbstractPhysicalObject*> GetColisionCoupleList(std::list<AbstractPhysicalObject*> &object_list) {
+std::list<AbstractPhysicalObject*> MainProcessor::GetColisionCoupleList(std::list<AbstractPhysicalObject*> &object_list) {
     std::list<AbstractPhysicalObject*> colision_object_list;
     int skip = 0;
     int count = 0;

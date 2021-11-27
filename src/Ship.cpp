@@ -1,6 +1,6 @@
 #include <Ship.hpp>
 #include <math.h>
-#include <CommonConst.hpp>
+#include <commonConst.hpp>
 
 
 Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,

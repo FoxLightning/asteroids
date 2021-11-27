@@ -21,5 +21,6 @@ public:
     void Run();
     void DrawContextObjects();
     std::list<AbstractPhysicalObject*> GetAbstractPhisicalObjectList();
+    std::list<AbstractPhysicalObject*> GetColisionCoupleList(std::list<AbstractPhysicalObject*> &object_list);
     std::list<AbstractVisibleObject*> GetAbstractVisibleObjectList();
 };

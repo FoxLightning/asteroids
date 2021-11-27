@@ -2,7 +2,7 @@
 #include <Ship.hpp>
 #include <cmath>
 #include <stdlib.h>
-#include <CommonConst.hpp>
+#include <commonConst.hpp>
 
 #define BULLET_SPEED 20.f
 
