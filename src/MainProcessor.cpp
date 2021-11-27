@@ -70,6 +70,7 @@ float DotProduct(sf::Vector2f rv, sf::Vector2f normal) {
 //     // std::cout << "Bv y: " << B->velocity.y << std::endl;
 // }
 
+
 void check_colision(std::list<void*> &common_list) {
     std::list<AbstractPhysicalObject*> collaps_list;
     for (void* cur_list: common_list) {
