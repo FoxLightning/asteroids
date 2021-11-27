@@ -12,10 +12,12 @@ protected:
     sf::Vector2f        acceleration;
     int                 radious;
     long double         rotation;
+    float               mass;
 public:
     virtual void            calculate() =0;
     sf::Vector2f            GetPosition() {return position;};
     sf::Vector2f            GetSpeed() {return speed;};
+    float                   GetMass() {return mass;}
     void                    SetSpeed(sf::Vector2f in_speed) {speed = in_speed;}
     virtual long double     GetRadious() =0;
     AbstractPhysicalObject() {};

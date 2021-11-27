@@ -13,6 +13,7 @@ Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
     alive               = true;
     rotation            = 0.f;
     radious             = 10.f;
+    mass                = 20.f;
 
     setShape();
 }

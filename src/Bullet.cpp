@@ -15,6 +15,7 @@ Bullet::Bullet(Ship *ship) {
     window      = ship->window;
     alive       = true;
     radious     = 1.f;
+    mass        = 5.f;
 
     setSpeed(ship);
     setRecoil(ship);

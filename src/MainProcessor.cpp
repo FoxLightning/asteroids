@@ -48,19 +48,16 @@ void ResolveColision(AbstractPhysicalObject* A, AbstractPhysicalObject* B) {
     }
 
     // Вычисляем упругость
-    float e = 1;
+    float e = 0.5;
 
     // Вычисляем скаляр импульса силы
     float j = -(1 + e) * velAlongNormal;
-    // j /= 1 / A->mass + 1 / B->mass;
-    j /= 1 / 1 + 1 / 1;
+    j /= 1.f / A->GetMass() + 1.f / B->GetMass();
 
     // Прикладываем импульс силы
     sf::Vector2f impulse = j * normal;
-    // A->velocity -= 1 / A->mass * impulse;
-    // B->velocity += 1 / B->mass * impulse;
-    A->SetSpeed(A->GetSpeed()-impulse);
-    B->SetSpeed(B->GetSpeed()+impulse);
+    A->SetSpeed(A->GetSpeed()-1.f/A->GetMass()*impulse);
+    B->SetSpeed(B->GetSpeed()+1.f/B->GetMass()*impulse);
 }
 
 bool CheckColision(AbstractPhysicalObject* lvalue, AbstractPhysicalObject* rvalue) {
