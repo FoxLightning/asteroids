@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <commonConst.hpp>
 
-#define BULLET_SPEED 20.f
+#define BULLET_SPEED 8.f
 
 
 Bullet::Bullet(Ship *ship) {

@@ -68,6 +68,27 @@ std::list<AbstractVisibleObject*> MainProcessor::GetAbstractVisibleObjectList() 
     return object_list;
 }
 
+inline void MainProcessor::CalculateColisisons() {
+    std::list<AbstractPhysicalObject*> phisical_obj_list = GetAbstractPhisicalObjectList();
+    std::list<AbstractPhysicalObject*> colision_couples = GetColisionCoupleList(phisical_obj_list);
+
+    AbstractPhysicalObject* prev = NULL;
+    for (AbstractPhysicalObject* cur: colision_couples) {
+        if (prev == NULL) {
+            prev = cur;
+        } else {
+            ResolveColision(prev, cur);
+            prev = NULL;
+        }
+    }
+}
+
+inline void MainProcessor::DrawAllObjects() {
+    for(auto obj: GetAbstractVisibleObjectList()) {
+        obj->draw();
+    }
+}
+
 void MainProcessor::Run() {
     int                 cooldown = 10;
     int                 current_cooldown = 0;
@@ -76,11 +97,8 @@ void MainProcessor::Run() {
     long int            frame_counter = 60*59;
     long double         direction;
     sf::Vector2f        direction_vector;
-    sf::RenderWindow    win(sf::VideoMode(resolution.x, resolution.y), "Blastar");
-    window = &win;
     sf::Vector2i        cursor_position = sf::Mouse::getPosition(*window);
 
-    win.setVerticalSyncEnabled(true);
 
     // create main ship
     Ship ship(sf::Vector2f(resolution/2),
@@ -140,32 +158,22 @@ void MainProcessor::Run() {
             ship.SetRotation(direction+90);
         }
 
-        // collision check
-        auto v = GetAbstractPhisicalObjectList();
-        auto col_c = GetColisionCoupleList(v);
-        AbstractPhysicalObject* prev = NULL;
-        for (AbstractPhysicalObject* cur: GetColisionCoupleList(col_c)) {
-            if (prev == NULL) {
-                prev = cur;
-            } else {
-                ResolveColision(prev, cur);
-                prev = NULL;
-            }
-        }
-
         window->clear();
-        ship.draw();
-        for(auto obj: GetAbstractVisibleObjectList()) {
-            obj->draw();
-        }
+
+        CalculateColisisons();
+        DrawAllObjects();
+
         window->display();
     }
 }
 
 MainProcessor::MainProcessor() {
-    // settings
+    // create window
     resolution.x = 1600;
     resolution.y = 900;
+    window = new sf::RenderWindow(sf::VideoMode(resolution.x, resolution.y), "Blastar");
+    window->setVerticalSyncEnabled(true);
+
 }
 
 MainProcessor::~MainProcessor() {

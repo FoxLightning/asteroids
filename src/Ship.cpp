@@ -2,6 +2,8 @@
 #include <math.h>
 #include <commonConst.hpp>
 
+#define ENGINE_BOOST 0.02
+
 
 Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
            sf::RenderWindow *win, sf::Vector2i resolution) {
@@ -13,7 +15,7 @@ Ship::Ship(sf::Vector2f pos, sf::Vector2f sp,
     alive               = true;
     rotation            = 0.f;
     radious             = 10.f;
-    mass                = 20.f;
+    mass                = 200.f;
 
     setShape();
 }
@@ -67,8 +69,8 @@ void Ship::SetRotation(long double input_rotation) {
 }
 
 void Ship::engine_on() {
-    acceleration.x = 0.1 * cos((rotation-90) * PI / 180.f);
-    acceleration.y = 0.1 * sin((rotation-90) * PI / 180.f);;
+    acceleration.x = ENGINE_BOOST * cos((rotation-90) * PI / 180.f);
+    acceleration.y = ENGINE_BOOST * sin((rotation-90) * PI / 180.f);;
 }
 
 void Ship::engine_off() {

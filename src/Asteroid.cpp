@@ -4,8 +4,7 @@
 #include <cmath>
 #include <commonConst.hpp>
 
-#define MAX_SPEED           10
-#define MIN_SPEED           1
+#define SPEED               2
 #define MAX_ROTATION_SPEED  2
 #define MAX_RADIOUS         50
 #define MIN_RADIOUS         10
@@ -108,7 +107,7 @@ int Asteroid::setRandomSpeed(sf::Vector2f target) {
     direction_vector.x = target.x - position.x;
     direction_vector.y = target.y - position.y;
     double direction = direction_vector.y / direction_vector.x;
-    double mod_speed = 10;
+    double mod_speed = SPEED;
     speed.x = mod_speed / (sqrt(1 + direction * direction));
     speed.y = speed.x * direction;
     if (direction_vector.x < 0) {
